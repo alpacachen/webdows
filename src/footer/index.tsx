@@ -1,25 +1,26 @@
-import React, { useState } from "react";
-import styles from './index.module.less'
-import { format } from 'date-fns'
-import { useInterval } from 'react-use'
+import React from "react";
+import styles from "./index.module.less";
+import { WindowsButton } from "./windows-button";
+import { RightPanel } from "./right-panel";
 
-const Start = () => {
-    return <div></div>
-}
+const LeftPanel = () => {
+	return <div></div>;
+};
 
-const RightPanel = () => {
-    const [time, setTime] = useState(format(new Date(), 'HH:mm'))
-    useInterval(() => {
-        setTime(format(new Date(), 'HH:mm'))
-    }, 1000 * 10)
-    return <div className={styles.right}>
-        {time}
-    </div>
-}
+const CenterPanel = () => {
+	return (
+		<div className="flex items-center">
+			<WindowsButton />
+		</div>
+	);
+};
 
 export const Footer = () => {
-    return <div className={styles.footer}>
-        <Start />
-        <RightPanel />
-    </div>
-}
+	return (
+		<div className={styles.footer}>
+			<LeftPanel />
+			<CenterPanel />
+			<RightPanel />
+		</div>
+	);
+};
