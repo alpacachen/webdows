@@ -1,10 +1,11 @@
-import React, { FC, useCallback, useRef } from "react";
+import React from "react";
+import { useCallback, useRef, useState } from "react";
 import { useBearStore } from "../../../state";
 
 const useMousePointDownMove = () => {
     const setVolume = useBearStore((s) => s.setVolume);
     const setVolumeAbsolute = useBearStore((s) => s.setVolumeAbsolute);
-    const [isMouseDown, setIsMouseDown] = React.useState(false);
+    const [isMouseDown, setIsMouseDown] = useState(false);
     const parentRef = useRef<HTMLDivElement>(null);
     const onMouseMove = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
@@ -22,7 +23,7 @@ const useMousePointDownMove = () => {
             (parentRef.current?.getBoundingClientRect?.()?.left ?? 0);
         const width = parentRef.current?.clientWidth ?? 0;
         setVolumeAbsolute((left / width) * 100);
-    }, []);
+    }, [setVolumeAbsolute]);
 
     return [setIsMouseDown, onMouseMove, parentRef, click] as const;
 };
