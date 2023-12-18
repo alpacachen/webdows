@@ -9,7 +9,6 @@ import { useBearStore } from "../../state";
 export const Volume = () => {
     const ref = useRef<SliderRef>(null);
     const volume = useBearStore((s) => s.volume);
-    const setVolume = useBearStore((s) => s.setVolume);
     const volumeIconValue = useMemo(() => {
         if (volume === 0) return VolumeValue.Mute;
         if (volume < 30) return VolumeValue.Low;
@@ -20,10 +19,7 @@ export const Volume = () => {
         <>
             <Slider ref={ref}>
                 <div className="w-260px p-4">
-                    <VolumeRange
-                        value={volume}
-                        onChange={setVolume}
-                    ></VolumeRange>
+                    <VolumeRange />
                 </div>
             </Slider>
             <HLButton
