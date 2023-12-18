@@ -1,6 +1,7 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, HTMLAttributes, ReactNode } from "react";
 import styles from './index.module.less'
 import classnames from 'classnames'
-export const HLButton: FC<{ children: ReactNode; className?:string }> = (props) => {
-	return <button className={classnames(styles.hl_button, props.className)}>{props.children}</button>;
+export const HLButton: FC<{ children: ReactNode } & HTMLAttributes<HTMLButtonElement>> = (props) => {
+	const { className, children, ...rest} = props
+	return <button className={classnames(styles.hl_button, className)} {...rest}>{children}</button>;
 };
