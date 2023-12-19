@@ -3,7 +3,7 @@ import { HLButton } from "../hl-button";
 import { VolumeIcon } from "./icon";
 import { VolumeValue } from "./type";
 import { Slider } from "../slider";
-import { SliderRef } from "../slider/type";
+import { SlideDirection, SliderRef } from "../slider/type";
 import { VolumeRange } from "./range";
 import { useBearStore } from "../../state";
 export const Volume = () => {
@@ -18,13 +18,13 @@ export const Volume = () => {
     return (
         <>
             <Slider ref={ref}>
-                <div className="w-260px p-4">
+                <div className="w-260px p-4 bg-light rounded-2 slide-shadow mb-4">
                     <VolumeRange />
                 </div>
             </Slider>
             <HLButton
                 onClick={() => {
-                    ref.current?.open();
+                    ref.current?.open(SlideDirection.bottomToTop);
                 }}
             >
                 <div className="flex h-24px items-center">

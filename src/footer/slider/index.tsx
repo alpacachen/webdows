@@ -5,20 +5,20 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { SliderProps, SliderRef } from "./type";
-import {
-    FooterBarHeight,
-    PanelBackground,
-    SliderZIndex,
-} from "../../constance";
+import { SlideDirection, SliderProps, SliderRef } from "./type";
+import { FooterBarHeight, SliderZIndex } from "../../constance";
 import { createPortal } from "react-dom";
 import classNames from "classnames";
 import { useClickAway } from "react-use";
+import styles from "./index.module.less";
+
 const _Slider = (props: SliderProps, ref: Ref<SliderRef>) => {
     const { children } = props;
     const [showMessage, setShowMessage] = useState(false);
+    const [direction, setDirection] = useState(SlideDirection.bottomToTop);
     useImperativeHandle(ref, () => ({
-        open: () => {
+        open: (dir: SlideDirection) => {
+            setDirection(dir);
             setShowMessage(true);
         },
     }));
@@ -33,11 +33,14 @@ const _Slider = (props: SliderProps, ref: Ref<SliderRef>) => {
                     <div
                         ref={nodeRef}
                         style={{
+                            maxHeight: `calc(100vh - ${FooterBarHeight})`,
                             zIndex: SliderZIndex,
-                            background: PanelBackground,
-                            bottom: FooterBarHeight + 8,
+                            bottom: FooterBarHeight,
                         }}
-                        className={classNames("rounded-2 absolute right-2")}
+                        className={classNames(
+                            "absolute right-4",
+                            styles[direction]
+                        )}
                     >
                         {children}
                     </div>,

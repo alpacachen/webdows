@@ -49,9 +49,9 @@ export const VolumeRange = () => {
                 <div
                     onClick={click}
                     style={{ width: `${volume}%` }}
-                    className="bg-deep"
+                    className="bg-deep cursor-pointer"
                 ></div>
-                <div onClick={click} className="bg-gray flex-1"></div>
+                <div onClick={click} className="bg-gray cursor-pointer flex-1"></div>
             </div>
             <div
                 ref={buttonRef}

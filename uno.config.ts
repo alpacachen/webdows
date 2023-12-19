@@ -3,6 +3,8 @@ import type { StaticRule } from "unocss";
 
 export const customCssRules: StaticRule[] = [
     ["bg-deep", { "background-color": "#2B66BA" }],
+    ["bg-light", { "background-color": "rgba(219, 235, 250, 0.98)" }],
+    ["slide-shadow", { "box-shadow": "0 2px 10px 0px rgba(0,0,0,0.1)" }],
     [
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
