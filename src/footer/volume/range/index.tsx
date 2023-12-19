@@ -1,47 +1,50 @@
 import React from "react";
 import { useCallback, useRef, useState } from "react";
 import { useBearStore } from "../../../state";
+import { useEvent } from "react-use";
 
 const useMousePointDownMove = () => {
     const setVolume = useBearStore((s) => s.setVolume);
     const setVolumeAbsolute = useBearStore((s) => s.setVolumeAbsolute);
     const [isMouseDown, setIsMouseDown] = useState(false);
     const parentRef = useRef<HTMLDivElement>(null);
-    const onMouseMove = useCallback(
-        (e: React.MouseEvent<HTMLDivElement>) => {
-            if (isMouseDown) {
-                const width = parentRef.current?.clientWidth ?? 0;
-                setVolume((e.movementX / width) * 100);
-            }
+
+    const click = useCallback(
+        (e: React.MouseEvent) => {
+            const left =
+                e.clientX -
+                (parentRef.current?.getBoundingClientRect?.()?.left ?? 0);
+            const width = parentRef.current?.clientWidth ?? 0;
+            setVolumeAbsolute((left / width) * 100);
         },
-        [isMouseDown, setVolume]
+        [setVolumeAbsolute]
     );
+    const buttonRef = useRef<HTMLDivElement>(null);
+    useEvent("mousedown", (e: React.MouseEvent) => {
+        if (e.target == buttonRef.current) {
+            setIsMouseDown(true);
+        }
+    });
+    useEvent("mouseup", () => {
+        setIsMouseDown(false);
+    });
+    useEvent("mousemove", (e: React.MouseEvent) => {
+        if (isMouseDown) {
+            const width = parentRef.current?.clientWidth ?? 0;
+            setVolume((e.movementX / width) * 100);
+        }
+    });
 
-    const click = useCallback((e: React.MouseEvent) => {
-        const left =
-            e.clientX -
-            (parentRef.current?.getBoundingClientRect?.()?.left ?? 0);
-        const width = parentRef.current?.clientWidth ?? 0;
-        setVolumeAbsolute((left / width) * 100);
-    }, [setVolumeAbsolute]);
-
-    return [setIsMouseDown, onMouseMove, parentRef, click] as const;
+    return [buttonRef, parentRef, click] as const;
 };
 
 export const VolumeRange = () => {
     const volume = useBearStore((s) => s.volume);
 
-    const [setIsMouseDown, onMouseMove, parentRef, click] =
-        useMousePointDownMove();
+    const [buttonRef, parentRef, click] = useMousePointDownMove();
 
     return (
-        <div
-            onMouseMove={onMouseMove}
-            ref={parentRef}
-            onMouseUp={() => setIsMouseDown(false)}
-            onMouseLeave={() => setIsMouseDown(false)}
-            className="h-8 relative flex w-full items-center"
-        >
+        <div ref={parentRef} className="h-8 relative flex w-full items-center">
             <div className="h-1 w-full rounded flex overflow-hidden">
                 <div
                     onClick={click}
@@ -51,7 +54,7 @@ export const VolumeRange = () => {
                 <div onClick={click} className="bg-gray flex-1"></div>
             </div>
             <div
-                onMouseDown={() => setIsMouseDown(true)}
+                ref={buttonRef}
                 style={{ left: `${volume}%` }}
                 className="-translate-x-50% absolute rounded-full h-3 w-3 bg-white cursor-pointer bg-deep b-3px b-style-solid box-border border-color-white transition-border hover:b-2px"
             ></div>
